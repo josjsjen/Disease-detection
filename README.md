@@ -1,4 +1,4 @@
-# Diease detection: Diagnoses by X-ray images 
+# Diease detection: diagnoses by X-ray images 
 
 I will introduce you to using a convolutional network to tackle a realistic dataset in medical diagnostics. Specifically, we use the ChestXRay dataset, a set of X-ray images labeled with corresponding diagnoses.
 
