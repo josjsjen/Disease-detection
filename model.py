@@ -1,11 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Fri May  4 19:28:58 2018
-
 @author: jie
 """
-
 import tensorflow as tf
 import numpy as np
 import h5py
@@ -70,16 +67,11 @@ print("This X-Ray "+("HAS" if pred else "DOES NOT have")+ " a pneumothorax")
 '''
 
 ##########################################
-## Define CNN model
-
-batch_size = 15
-learning_rate = 0.05
-num_training_steps = int(1e3)
-
-
+############ Define CNN model ############
 #downscaled images to  256×256  pixels.
 x = tf.placeholder(shape=[None, 256, 256, 1], dtype=tf.float32)         
 y = tf.placeholder(shape=[None, 2], dtype=tf.float32)
+
 # reshape our input to a 4-D blob that preserves the spatial nature of the image.
 x_image = tf.map_fn(lambda frame: tf.image.per_image_standardization(frame), x)
 
@@ -111,10 +103,19 @@ probabilities = tf.nn.softmax(y_)
 
 
 
+##########################################
+############ Define hyperparameters ######
+
+batch_size = 15
+learning_rate = 0.05
+num_training_steps = int(1e3)
+
+
 
 ##########################################
 ## define cost, optimizer and accurancy###
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=y, logits=y_)) 
+# gradient descent with momentum to prevent oscillations and badly conditioned curvature
 optimizer = tf.train.MomentumOptimizer(learning_rate, 0.9, use_nesterov=True).minimize(cost)
 
 correct_prediction = tf.equal(tf.argmax(y_, 1), tf.argmax(y, 1))
@@ -129,16 +130,7 @@ prediction = tf.argmax(y_,1)
 init = tf.global_variables_initializer()
 sess = tf.InteractiveSession()
 saver = tf.train.Saver()
-
-
-##########################################
-############ Save Summary ################
-
-tf.summary.scalar('cost',cost) 
-tf.summary.scalar('accuracy',accuracy)
-
-merged_summary_op = tf.summary.merge_all() 
-                                        
+                           
 ##########################################
 ############ Train Model #################
 
@@ -167,10 +159,10 @@ for step in range(num_training_steps):
       print("Model saved in file: %s" % save_path)
 
 
-
-
-
-
+##########################################
+########## Reload Train Model ############
+#restore the weights from a trained model
+#saver.restore(sess, "./saved_model/model.ckpt") #only run this once!
 
 
 
