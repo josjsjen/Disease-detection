@@ -1,4 +1,4 @@
-# Diease detection from X-ray scans 
+# Disease detection from X-ray scans 
 
 I will introduce you to using a convolutional network to tackle a realistic dataset in medical diagnostics. Specifically, we use the ChestXRay dataset, a set of X-ray images labeled with corresponding diagnoses.
 
